@@ -1,10 +1,10 @@
-name: Build APK with Capacitor
+name: Build APK - Simple Web Wrapper
 
 on:
   push:
     branches:
       - capacitor-setup
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,13 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: '11'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -31,30 +25,19 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Add Android platform
-        run: npx cap add android --web-dir dist
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '11'
 
-      - name: Sync Capacitor
-        run: npx cap sync android
-
-      - name: Build Release APK
+      - name: Create APK directories
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleRelease
-          cd ..
+          mkdir -p apk-build/src/main/assets
+          cp -r dist/* apk-build/src/main/assets/
 
-      - name: Upload Release APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: android/app/build/outputs/apk/release/app-release.apk
-      - name: Create Release
-        if: github.event_name == 'push' && success()
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.run_number }}
-          name: APK Release v${{ github.run_number }}
-          files: android/app/build/outputs/apk/release/app-release.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: app-web-build
+          path: apk-build/

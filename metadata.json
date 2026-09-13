@@ -1,0 +1,6 @@
+{
+  "name": "Zenith Himalayan - Services & Organic Store",
+  "description": "पोस्टर डिज़ाइन, रचनात्मक डिजिटल सेवाएं, शुद्ध हिमालयी जैविक उत्पाद और विस्तृत एडमिन ऑर्डर प्रबंधन प्रणाली।",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

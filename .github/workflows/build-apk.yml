@@ -49,7 +49,7 @@ jobs:
         with:
           name: app-release
           path: android/app/build/outputs/apk/release/app-release.apk
-
+        retention-days: 30
       - name: Create Release
         if: github.event_name == 'push' && success()
         uses: softprops/action-gh-release@v2
@@ -57,5 +57,14 @@ jobs:
           tag_name: v${{ github.run_number }}
           name: APK Release v${{ github.run_number }}
           files: android/app/build/outputs/apk/release/app-release.apk
+             body: |
+            ## APK Build Successful! 🎉
+            
+            **Build Number:** ${{ github.run_number }}
+            **Branch:** capacitor-setup
+            **Node.js:** 22 (LTS)
+            
+            ### Download:
+            - **app-release.apk** - Production ready APK
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
